@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>iOSCommand</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
+	<key>NSExtension</key>
+	<dict>
+		<key>NSExtensionAttributes</key>
+		<dict>
+			<key>XCSourceEditorCommandDefinitions</key>
+			<array>
+				<dict>
+					<key>XCSourceEditorCommandClassName</key>
+					<string>SourceEditorCommand</string>
+					<key>XCSourceEditorCommandIdentifier</key>
+					<string>$(PRODUCT_BUNDLE_IDENTIFIER).SourceEditorCommand</string>
+					<key>XCSourceEditorCommandName</key>
+					<string>LayoutSubview</string>
+				</dict>
+			</array>
+			<key>XCSourceEditorExtensionPrincipalClass</key>
+			<string>SourceEditorExtension</string>
+		</dict>
+		<key>NSExtensionPointIdentifier</key>
+		<string>com.apple.dt.Xcode.extension.source-editor</string>
+	</dict>
+    
+    <key>#UIButton#</key>
+    <string>
+- (#type# *)#name# {
+    if (!_#name#) {
+        _#name# = [[#type# alloc] init];
+        [_#name# setBtnStyle:[#style#]];
+        _#name#.backgroundColor = [#color#];
+        _#name#.titleLabel.font = HB_Font[#B#]([#font#]);
+        [_#name# setTitle:[#title#] forState:UIControlStateNormal];
+        [_#name# setTitleColor:[#color#] forState:UIControlStateNormal];
+        [_#name# addTarget:self action:[#sel#] forControlEvents:UIControlEventTouchUpInside];
+        [_#name# setImage:[UIImage imageNamed:[#imagename#]] forState:UIControlStateNormal];
+    }
+    
+    return _#name#;
+}
+    </string>
+    <key>#UIView#</key>
+    <string>
+- (#type# *)#name# {
+    if (!_#name#) {
+        _#name# = [[#type# alloc] init];
+        _#name#.backgroundColor = [#color#];
+    }
+    
+    return _#name#;
+}
+    </string>
+    <key>#UIImageView#</key>
+    <string>
+- (#type# *)#name# {
+    if (!_#name#) {
+        _#name# = [[#type# alloc] init];
+        _#name#.image = [UIImage imageNamed:[#imagename#]];
+    }
+    
+    return _#name#;
+}
+    </string>
+    <key>#UILabel#</key>
+    <string>
+- (#type# *)#name# {
+    if (!_#name#) {
+        _#name# = [[#type# alloc] init];
+        _#name#.textColor = [#color#];
+        _#name#.font = HB_Font[#B#]([#font#]);
+        _#name#.numberOfLines = [#num#];
+    }
+    
+    return _#name#;
+}
+    </string>
+
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright © 2019 QDFish. All rights reserved.</string>
+</dict>
+</plist>
