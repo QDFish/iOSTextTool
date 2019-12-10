@@ -71,7 +71,7 @@ _var.name = _name; \
         if (!findImplementaion && [results count] < 2) {
             continue;
             
-        } else if (!findImplementaion && [[results firstObject] isEqualToString:@"@implementation"] && [results[1] isEqualToString:name]) {
+        } else if (!findImplementaion && [[results firstObject] isEqualToString:@"@implementation"] /*&& [results[1] isEqualToString:name]*/) {
             findImplementaion = YES;
             continue;
         }
@@ -88,12 +88,10 @@ _var.name = _name; \
     return insertLine;
 }
 
-- (NSArray *)dealPropertys:(NSArray <HBProperty *> *)propertys {
-    NSMutableArray *allNewLines = [NSMutableArray array];
-    
-    NSMutableArray *firstPart = [NSMutableArray array];
-    [firstPart addObject:@"- (void)initSubViews {"];
+- (void)dealPropertys:(NSArray <HBProperty *> *)propertys allLines:(NSMutableArray *)lines withFirstPoint:(NSInteger)firstPoint {
     NSMutableArray *secondPart = [NSMutableArray array];
+    NSMutableArray *firstPart = [NSMutableArray array];
+    
     for (HBProperty *property in propertys) {
         NSString *content = [NSBundle mainBundle].infoDictionary[[NSString stringWithFormat:@"#%@#", property.type]];
         if (content.length) {
@@ -111,10 +109,39 @@ _var.name = _name; \
         }
     }
     
+    [lines insertObjects:firstPart atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(firstPoint, firstPart.count)]];
+    NSInteger secondPoint = [self insertPointWithLines:lines classname:nil];
+    
+    if (secondPoint != NSNotFound) {
+        [lines insertObjects:secondPart atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(secondPoint, secondPart.count)]];
+    }
+}
+
+- (NSInteger)insert:(NSMutableArray *)lines subviewInterface:(NSInteger)inserPoint {
+    NSInteger initPoint = NSNotFound;
+    BOOL find = NO;
+    for (NSInteger i = 0; i < lines.count; i++) {
+        NSString *line = lines[i];
+        
+        if (find && [self string:line mathPattern:@"\\s*\\}\\s*"]) {
+            initPoint = i;
+            break;
+        } else if ([[self resultWithString:line pattern:@"\\s*-\\s*\\(\\s*void\\s*\\)\\s*initSubViews\\s*\\{\\s*"] count]) {
+            find = YES;
+        }
+    }
+    
+    if (initPoint != NSNotFound) {
+        return initPoint;
+    }
+    
+    NSMutableArray *firstPart = [NSMutableArray array];
+    [firstPart addObject:@"- (void)initSubViews {"];
     [firstPart addObject:@"}"];
-    [allNewLines addObjectsFromArray:firstPart];
-    [allNewLines addObjectsFromArray:secondPart];
-    return [allNewLines copy];
+        
+    [lines insertObjects:firstPart atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(inserPoint, 2)]];
+    
+    return inserPoint + 1;
 }
 
 - (void)performCommandWithInvocation:(XCSourceEditorCommandInvocation *)invocation completionHandler:(void (^)(NSError * _Nullable nilOrError))completionHandler {
@@ -132,26 +159,25 @@ _var.name = _name; \
     
     NSString *className = [self getClassNameWithSelections:selectLines];
     NSLog(@"classname %@", className);
-    if (![className length]) {
-        XCFalied(@"classname requried");
-    }
+//    if (![className length]) {
+//        XCFalied(@"classname requried");
+//    }
     
     NSArray <HBProperty *> *propertys = [self propertysWithSelections:selectLines];
     if (![propertys count]) {
         XCFalied(@"it should have 1 propery at least");
     }
     
-    
-    NSInteger insertLine = [self insertPointWithLines:lines classname:className];
-    if (insertLine == NSNotFound || insertLine < 0) {
+    NSInteger secondPoint = [self insertPointWithLines:lines classname:className];
+    if (secondPoint == NSNotFound || secondPoint < 0) {
         XCFalied(@"can't find the @end");
     }
     
-    NSArray *allNewLines = [self dealPropertys:propertys];
-    [lines insertObjects:allNewLines atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(insertLine, allNewLines.count)]];
+    NSInteger firstPoint = [self insert:lines subviewInterface:secondPoint];
+    
+    [self dealPropertys:propertys allLines:lines withFirstPoint:firstPoint];
     XCSuccess();
 }
-
 
 - (NSArray<NSString *> *)resultWithString:(NSString *)str pattern:(NSString *)pattern {
     NSError *error;
@@ -170,6 +196,11 @@ _var.name = _name; \
     }
     
     return results;
+}
+
+
+- (BOOL)string:(NSString *)str mathPattern:(NSString *)pattern{
+    return [[self resultWithString:str pattern:pattern] count];
 }
 
 @end
