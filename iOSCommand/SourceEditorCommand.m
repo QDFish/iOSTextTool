@@ -126,7 +126,7 @@ _var.name = _name; \
         if (find && [self string:line mathPattern:@"\\s*\\}\\s*"]) {
             initPoint = i;
             break;
-        } else if ([[self resultWithString:line pattern:@"\\s*-\\s*\\(\\s*void\\s*\\)\\s*initSubViews\\s*\\{\\s*"] count]) {
+        } else if ([[self resultWithString:line pattern:@"\\s*-\\s*\\(\\s*void\\s*\\)\\s*initSubviews\\s*\\{\\s*"] count]) {
             find = YES;
         }
     }
