@@ -95,7 +95,7 @@ _var.name = _name; \
     for (HBProperty *property in propertys) {
         NSString *content = [NSBundle mainBundle].infoDictionary[[NSString stringWithFormat:@"#%@#", property.type]];
         if (content.length) {
-            NSString *firstStr = [NSString stringWithFormat:@"\t[<#superView#> addSubView:self.%@];", property.name];
+            NSString *firstStr = [NSString stringWithFormat:@"\t[<#superView#> addSubview:self.%@];", property.name];
             [firstPart addObject:firstStr];
             
             content = [content stringByReplacingOccurrencesOfString:@"#type#" withString:property.type];
@@ -122,11 +122,10 @@ _var.name = _name; \
     BOOL find = NO;
     for (NSInteger i = 0; i < lines.count; i++) {
         NSString *line = lines[i];
-        
-        if (find && [self string:line mathPattern:@"\\s*\\}\\s*"]) {
-            initPoint = i;
-            break;
-        } else if ([[self resultWithString:line pattern:@"\\s*-\\s*\\(\\s*void\\s*\\)\\s*initSubviews\\s*\\{\\s*"] count]) {
+                
+        if (find && [self string:line mathPattern:@"\\s*\\[\\s*\\w*[.]?\\w*\\s*addSubview.*"]) {
+            initPoint = i + 1;
+        } else if (!find && [[self resultWithString:line pattern:@"\\s*-\\s*\\(\\s*void\\s*\\)\\s*initSubViews\\s*\\{\\s*"] count]) {
             find = YES;
         }
     }
