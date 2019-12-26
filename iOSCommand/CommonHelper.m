@@ -15,10 +15,10 @@
 }
 
 + (NSArray<NSString *> *)resultWithString:(NSString *)str pattern:(NSString *)pattern {
-    return [self resultWithString:str pattern:pattern trimmingBlank:NO];
+    return [self resultWithString:str pattern:pattern trimmingBlank:YES];
 }
  
-+ (NSArray<NSString *> *)resultWithString:(NSString *)str pattern:(NSString *)pattern trimmingBlank:(BOOL)needBlank {
++ (NSArray<NSString *> *)resultWithString:(NSString *)str pattern:(NSString *)pattern trimmingBlank:(BOOL)trimmingBlank {
     NSError *error;
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
     NSArray<NSTextCheckingResult *> *rowResult = [regex matchesInString:str options:0 range:NSMakeRange(0, str.length)];
@@ -27,7 +27,7 @@
         for (int i = 0; i < rowResult.count; i++) {
             NSTextCheckingResult *res = rowResult[i];
             NSString *reStr = [str substringWithRange:res.range];
-            if (needBlank) {
+            if (trimmingBlank) {
                 reStr = [reStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
             }
             [results addObject:reStr];

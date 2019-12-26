@@ -109,7 +109,10 @@
             content = [content stringByReplacingOccurrencesOfString:@"[#" withString:@"<#"];
             content = [content stringByReplacingOccurrencesOfString:@"#]" withString:@"#>"];
             
+            
             newLines = [[content componentsSeparatedByString:@"\n"] mutableCopy];
+            [newLines addObject:@"\n"];
+            
             [secondPart addObjectsFromArray:newLines];
         }
     }
@@ -142,8 +145,9 @@
     NSMutableArray *firstPart = [NSMutableArray array];
     [firstPart addObject:@"- (void)initSubViews {"];
     [firstPart addObject:@"}"];
+    [firstPart addObject:@"\n"];
         
-    [lines insertObjects:firstPart atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(inserPoint, 2)]];
+    [lines insertObjects:firstPart atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(inserPoint, 3)]];
     
     return inserPoint + 1;
 }
