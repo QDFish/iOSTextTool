@@ -14,8 +14,8 @@
 		E54A17872399DFD70010858F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E54A17862399DFD70010858F /* main.m */; };
 		E54A17952399E0C70010858F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E54A17942399E0C70010858F /* Cocoa.framework */; };
 		E54A17992399E0C70010858F /* SourceEditorExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = E54A17982399E0C70010858F /* SourceEditorExtension.m */; };
-		E54A179C2399E0C70010858F /* SourceEditorCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = E54A179B2399E0C70010858F /* SourceEditorCommand.m */; };
 		E54A17A12399E0C70010858F /* iOSCommand.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E54A17922399E0C70010858F /* iOSCommand.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F6F7C57123B45109001AD162 /* LayoutSubViewCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = F6F7C57023B45109001AD162 /* LayoutSubViewCommand.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,10 +57,11 @@
 		E54A17942399E0C70010858F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		E54A17972399E0C70010858F /* SourceEditorExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SourceEditorExtension.h; sourceTree = "<group>"; };
 		E54A17982399E0C70010858F /* SourceEditorExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SourceEditorExtension.m; sourceTree = "<group>"; };
-		E54A179A2399E0C70010858F /* SourceEditorCommand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SourceEditorCommand.h; sourceTree = "<group>"; };
-		E54A179B2399E0C70010858F /* SourceEditorCommand.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SourceEditorCommand.m; sourceTree = "<group>"; };
 		E54A179D2399E0C70010858F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E54A179E2399E0C70010858F /* iOSCommand.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iOSCommand.entitlements; sourceTree = "<group>"; };
+		F6F7C56F23B45109001AD162 /* LayoutSubViewCommand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LayoutSubViewCommand.h; sourceTree = "<group>"; };
+		F6F7C57023B45109001AD162 /* LayoutSubViewCommand.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LayoutSubViewCommand.m; sourceTree = "<group>"; };
+		F6F7C57223B4530C001AD162 /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,10 +131,11 @@
 			children = (
 				E54A17972399E0C70010858F /* SourceEditorExtension.h */,
 				E54A17982399E0C70010858F /* SourceEditorExtension.m */,
-				E54A179A2399E0C70010858F /* SourceEditorCommand.h */,
-				E54A179B2399E0C70010858F /* SourceEditorCommand.m */,
 				E54A179D2399E0C70010858F /* Info.plist */,
 				E54A179E2399E0C70010858F /* iOSCommand.entitlements */,
+				F6F7C56F23B45109001AD162 /* LayoutSubViewCommand.h */,
+				F6F7C57023B45109001AD162 /* LayoutSubViewCommand.m */,
+				F6F7C57223B4530C001AD162 /* Header.h */,
 			);
 			path = iOSCommand;
 			sourceTree = "<group>";
@@ -247,8 +249,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F6F7C57123B45109001AD162 /* LayoutSubViewCommand.m in Sources */,
 				E54A17992399E0C70010858F /* SourceEditorExtension.m in Sources */,
-				E54A179C2399E0C70010858F /* SourceEditorCommand.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

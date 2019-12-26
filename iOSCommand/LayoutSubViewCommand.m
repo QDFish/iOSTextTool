@@ -1,21 +1,18 @@
 //
-//  SourceEditorCommand.m
+//  LayoutSubViewCommand.m
 //  iOSCommand
 //
-//  Created by QDFish on 2019/12/6.
+//  Created by 郑宗刚 on 2019/12/26.
 //  Copyright © 2019 QDFish. All rights reserved.
 //
 
-#import "SourceEditorCommand.h"
+#import "LayoutSubViewCommand.h"
+#import "Header.h"
 
 #define HBPropertyInit(_var, _name, _type) \
 HBProperty *_var = [HBProperty new]; \
 _var.type = _type; \
 _var.name = _name; \
-
-#define XCSuccess() completionHandler(nil)
-#define XCFalied(msg) completionHandler([NSError errorWithDomain:msg code:-1 userInfo:nil]); \
-                      return
 
 @interface HBProperty : NSObject
 
@@ -28,7 +25,8 @@ _var.name = _name; \
 
 @end
 
-@implementation SourceEditorCommand
+
+@implementation LayoutSubViewCommand
 
 - (NSString *__nullable)getClassNameWithSelections:(NSArray *)selectLines {
     NSString *firstLine = [selectLines firstObject];
@@ -94,6 +92,10 @@ _var.name = _name; \
     
     for (HBProperty *property in propertys) {
         NSString *content = [NSBundle mainBundle].infoDictionary[[NSString stringWithFormat:@"#%@#", property.type]];
+        if (!content.length) {
+            content = [NSBundle mainBundle].infoDictionary[@"#UIView#"];
+        }
+        
         if (content.length) {
             NSString *firstStr = [NSString stringWithFormat:@"\t[<#superView#> addSubview:self.%@];", property.name];
             [firstPart addObject:firstStr];

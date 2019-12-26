@@ -30,9 +30,9 @@
 			<array>
 				<dict>
 					<key>XCSourceEditorCommandClassName</key>
-					<string>SourceEditorCommand</string>
+					<string>LayoutSubViewCommand</string>
 					<key>XCSourceEditorCommandIdentifier</key>
-					<string>$(PRODUCT_BUNDLE_IDENTIFIER).SourceEditorCommand</string>
+					<string>$(PRODUCT_BUNDLE_IDENTIFIER).LayoutSubViewCommand</string>
 					<key>XCSourceEditorCommandName</key>
 					<string>LayoutSubview</string>
 				</dict>
@@ -43,9 +43,8 @@
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.dt.Xcode.extension.source-editor</string>
 	</dict>
-    
-    <key>#UIButton#</key>
-    <string>
+	<key>#UIButton#</key>
+	<string>
 - (#type# *)#name# {
     if (!_#name#) {
         _#name# = [[#type# alloc] init];
@@ -61,8 +60,8 @@
     return _#name#;
 }
     </string>
-    <key>#UIView#</key>
-    <string>
+	<key>#UIView#</key>
+	<string>
 - (#type# *)#name# {
     if (!_#name#) {
         _#name# = [[#type# alloc] init];
@@ -72,8 +71,8 @@
     return _#name#;
 }
     </string>
-    <key>#UIImageView#</key>
-    <string>
+	<key>#UIImageView#</key>
+	<string>
 - (#type# *)#name# {
     if (!_#name#) {
         _#name# = [[#type# alloc] init];
@@ -83,8 +82,8 @@
     return _#name#;
 }
     </string>
-    <key>#UILabel#</key>
-    <string>
+	<key>#UILabel#</key>
+	<string>
 - (#type# *)#name# {
     if (!_#name#) {
         _#name# = [[#type# alloc] init];
@@ -96,7 +95,6 @@
     return _#name#;
 }
     </string>
-
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2019 QDFish. All rights reserved.</string>
 </dict>
