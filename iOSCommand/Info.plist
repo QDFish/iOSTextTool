@@ -36,6 +36,14 @@
 					<key>XCSourceEditorCommandName</key>
 					<string>LayoutSubview</string>
 				</dict>
+                <dict>
+                    <key>XCSourceEditorCommandClassName</key>
+                    <string>InitSubviewCommand</string>
+                    <key>XCSourceEditorCommandIdentifier</key>
+                    <string>$(PRODUCT_BUNDLE_IDENTIFIER).InitSubViewCommand</string>
+                    <key>XCSourceEditorCommandName</key>
+                    <string>InitSubview</string>
+                </dict>
 			</array>
 			<key>XCSourceEditorExtensionPrincipalClass</key>
 			<string>SourceEditorExtension</string>
@@ -45,55 +53,31 @@
 	</dict>
 	<key>#UIButton#</key>
 	<string>
-- (#type# *)#name# {
-    if (!_#name#) {
-        _#name# = [[#type# alloc] init];
-        [_#name# setBtnStyle:[#style#]];
-        _#name#.backgroundColor = [#color#];
-        _#name#.titleLabel.font = HB_Font[#B#]([#font#]);
-        [_#name# setTitle:[#title#] forState:UIControlStateNormal];
-        [_#name# setTitleColor:[#color#] forState:UIControlStateNormal];
-        [_#name# addTarget:self action:[#sel#] forControlEvents:UIControlEventTouchUpInside];
-        [_#name# setImage:[UIImage imageNamed:[#imagename#]] forState:UIControlStateNormal];
-    }
-    
-    return _#name#;
-}
+#name# = [[#type# alloc] init];
+[#name# setBtnStyle:[#style#]];
+#name#.backgroundColor = [#color#];
+#name#.titleLabel.font = HB_Font[#B#]([#font#]);
+[#name# setTitle:[#title#] forState:UIControlStateNormal];
+[#name# setTitleColor:[#color#] forState:UIControlStateNormal];
+[#name# addTarget:self action:[#sel#] forControlEvents:UIControlEventTouchUpInside];
+[#name# setImage:[UIImage imageNamed:[#imagename#]] forState:UIControlStateNormal];
     </string>
 	<key>#UIView#</key>
 	<string>
-- (#type# *)#name# {
-    if (!_#name#) {
-        _#name# = [[#type# alloc] init];
-        _#name#.backgroundColor = [#color#];
-    }
-    
-    return _#name#;
-}
+#name# = [[#type# alloc] init];
+#name#.backgroundColor = [#color#];
     </string>
 	<key>#UIImageView#</key>
 	<string>
-- (#type# *)#name# {
-    if (!_#name#) {
-        _#name# = [[#type# alloc] init];
-        _#name#.image = [UIImage imageNamed:[#imagename#]];
-    }
-    
-    return _#name#;
-}
+#name# = [[#type# alloc] init];
+#name#.image = [UIImage imageNamed:[#imagename#]];
     </string>
 	<key>#UILabel#</key>
 	<string>
-- (#type# *)#name# {
-    if (!_#name#) {
-        _#name# = [[#type# alloc] init];
-        _#name#.textColor = [#color#];
-        _#name#.font = HB_Font[#B#]([#font#]);
-        _#name#.numberOfLines = [#num#];
-    }
-    
-    return _#name#;
-}
+#name# = [[#type# alloc] init];
+#name#.textColor = [#color#];
+#name#.font = HB_Font[#B#]([#font#]);
+#name#.numberOfLines = [#num#];
     </string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2019 QDFish. All rights reserved.</string>

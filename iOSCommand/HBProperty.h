@@ -1,5 +1,5 @@
 //
-//  LayoutSubViewCommand.h
+//  HBProperty.h
 //  iOSCommand
 //
 //  Created by 郑宗刚 on 2019/12/26.
@@ -7,14 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <XcodeKit/XcodeKit.h>
-
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface LayoutSubViewCommand : NSObject <XCSourceEditorCommand>
+@interface HBProperty : NSObject
 
-
+@property (nonatomic, copy) NSString *space;
+@property (nonatomic, copy) NSString *type;
+@property (nonatomic, copy) NSString *name;
 
 @end
 

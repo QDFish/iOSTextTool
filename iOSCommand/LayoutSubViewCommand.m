@@ -7,30 +7,14 @@
 //
 
 #import "LayoutSubViewCommand.h"
-#import "Header.h"
-
-#define HBPropertyInit(_var, _name, _type) \
-HBProperty *_var = [HBProperty new]; \
-_var.type = _type; \
-_var.name = _name; \
-
-@interface HBProperty : NSObject
-
-@property (nonatomic, strong) NSString *type;
-@property (nonatomic, strong) NSString *name;
-
-@end
-
-@implementation HBProperty
-
-@end
-
+#import "CommonHelper.h"
+#import "HBProperty.h"
 
 @implementation LayoutSubViewCommand
 
 - (NSString *__nullable)getClassNameWithSelections:(NSArray *)selectLines {
     NSString *firstLine = [selectLines firstObject];
-    NSArray *results = [self resultWithString:firstLine pattern:@"(?<=@interface)\\s*\\w+\\s*"];
+    NSArray *results = [CommonHelper resultWithString:firstLine pattern:@"(?<=@interface)\\s*\\w+\\s*"];
     if (![results count]) {
         return nil;
     }
@@ -41,7 +25,7 @@ _var.name = _name; \
 - (NSArray <HBProperty *> *)propertysWithSelections:(NSArray *)selectLines {
     NSMutableArray *arrs = [NSMutableArray array];
     for (NSString *line in selectLines) {
-        NSArray *results = [self resultWithString:line pattern:@"\\s*@property|\\s*\\(.*\\)\\s*|\\w+|\\s*\\*\\s*|\\w+"];
+        NSArray *results = [CommonHelper resultWithString:line pattern:@"\\s*@property|\\s*\\(.*\\)\\s*|\\w+|\\s*\\*\\s*|\\w+"];
         if ([results count] < 4) {
             continue;
         }
@@ -64,7 +48,7 @@ _var.name = _name; \
     NSInteger insertLine = NSNotFound;
     for (NSInteger i = 0; i < lines.count; i++) {
         NSString *line = lines[i];
-        NSArray *results = [self resultWithString:line pattern:@"\\s*@implementation|\\s*\\w+\\s*"];
+        NSArray *results = [CommonHelper resultWithString:line pattern:@"\\s*@implementation|\\s*\\w+\\s*"];
                 
         if (!findImplementaion && [results count] < 2) {
             continue;
@@ -76,7 +60,7 @@ _var.name = _name; \
         
         //        NSLog(@"result %@ line %@", results[0], line);
         
-        results = [self resultWithString:line pattern:@"\\s*@end\\s*"];
+        results = [CommonHelper resultWithString:line pattern:@"\\s*@end\\s*"];
         if (findImplementaion && [results count] && [[results firstObject] isEqualToString:@"@end"]) {
             insertLine = i;
             break;
@@ -97,17 +81,36 @@ _var.name = _name; \
         }
         
         if (content.length) {
+                                    
             NSString *firstStr = [NSString stringWithFormat:@"\t[<#superView#> addSubview:self.%@];", property.name];
             [firstPart addObject:firstStr];
             
-            content = [content stringByReplacingOccurrencesOfString:@"#type#" withString:property.type];
-            content = [content stringByReplacingOccurrencesOfString:@"#name#" withString:property.name];
-            content = [content stringByReplacingOccurrencesOfString:@"[#" withString:@"<#"];
-            content = [content stringByReplacingOccurrencesOfString:@"#]" withString:@"#>"];
+            content = [content stringByReplacingOccurrencesOfString:@"#name#" withString:[NSString stringWithFormat:@"_%@", property.name]];
             NSRange range = [content rangeOfString:@"\n" options:NSBackwardsSearch];
             content = [content stringByReplacingCharactersInRange:range withString:@""];
-            NSArray *newlines = [content componentsSeparatedByString:@"\n"];
-            [secondPart addObjectsFromArray:newlines];
+            range = [content rangeOfString:@"\n" options:0];
+            content = [content stringByReplacingCharactersInRange:range withString:@""];
+            
+            NSArray *propertyLines = [content componentsSeparatedByString:@"\n"];
+            NSMutableArray *newLines = [NSMutableArray arrayWithCapacity:propertyLines.count];
+            [newLines addObject:@"- (#type# *)#name# {"];
+            [newLines addObject:@"\tif (!_#name#) {"];
+            for (NSString *line in propertyLines) {
+                NSString *newLine = [@"\t\t" stringByAppendingString:line];
+                [newLines addObject:newLine];
+            }
+            [newLines addObject:@"\t}"];
+            [newLines addObject:@"\treturn _#name#;"];
+            [newLines addObject:@"}"];
+            
+            content = [newLines componentsJoinedByString:@"\n"];
+            content = [content stringByReplacingOccurrencesOfString:@"#name#" withString:property.name];
+            content = [content stringByReplacingOccurrencesOfString:@"#type#" withString:property.type];
+            content = [content stringByReplacingOccurrencesOfString:@"[#" withString:@"<#"];
+            content = [content stringByReplacingOccurrencesOfString:@"#]" withString:@"#>"];
+            
+            newLines = [[content componentsSeparatedByString:@"\n"] mutableCopy];
+            [secondPart addObjectsFromArray:newLines];
         }
     }
     
@@ -125,9 +128,9 @@ _var.name = _name; \
     for (NSInteger i = 0; i < lines.count; i++) {
         NSString *line = lines[i];
                 
-        if (find && [self string:line mathPattern:@"\\s*\\[\\s*\\w*[.]?\\w*\\s*addSubview.*"]) {
+        if (find && [CommonHelper string:line mathPattern:@"\\s*\\[\\s*.+\\s*addSubview.*"]) {
             initPoint = i + 1;
-        } else if (!find && [[self resultWithString:line pattern:@"\\s*-\\s*\\(\\s*void\\s*\\)\\s*initSubViews\\s*\\{\\s*"] count]) {
+        } else if (!find && [[CommonHelper resultWithString:line pattern:@"\\s*-\\s*\\(\\s*void\\s*\\)\\s*initSubViews\\s*\\{\\s*"] count]) {
             find = YES;
         }
     }
@@ -178,30 +181,6 @@ _var.name = _name; \
     
     [self dealPropertys:propertys allLines:lines withFirstPoint:firstPoint];
     XCSuccess();
-}
-
-- (NSArray<NSString *> *)resultWithString:(NSString *)str pattern:(NSString *)pattern {
-    NSError *error;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
-    NSArray<NSTextCheckingResult *> *rowResult = [regex matchesInString:str options:0 range:NSMakeRange(0, str.length)];
-    NSMutableArray *results = [NSMutableArray array];
-    if (rowResult) {
-        for (int i = 0; i < rowResult.count; i++) {
-            NSTextCheckingResult *res = rowResult[i];
-            NSString *reStr = [str substringWithRange:res.range];
-            reStr = [reStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-            [results addObject:reStr];
-        }
-    } else {
-        NSLog(@"error == %@",error.description);
-    }
-    
-    return results;
-}
-
-
-- (BOOL)string:(NSString *)str mathPattern:(NSString *)pattern{
-    return [[self resultWithString:str pattern:pattern] count];
 }
 
 @end
