@@ -55,7 +55,7 @@
             NSString *newLine = [property.space stringByAppendingString:line];
             [newLines addObject:newLine];
         }
-        [newLines addObject:[property.space stringByAppendingFormat:@"[<#superView#> addSubview:self.%@];", property.name]];
+        [newLines addObject:[property.space stringByAppendingFormat:@"[<#superView#> addSubview:%@];", property.name]];
         
         content = [newLines componentsJoinedByString:@"\n"];
         content = [content stringByReplacingOccurrencesOfString:@"#name#" withString:property.name];
