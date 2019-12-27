@@ -75,7 +75,7 @@
 
 - (HBProperty *)propertyWithSelections:(NSArray *)selectLines {
     NSString *line = [selectLines firstObject];
-    NSArray *results = [CommonHelper resultWithString:line pattern:@"^\\s+|\\w+|\\s*\\*\\s*|\\w+$"];
+    NSArray *results = [CommonHelper resultWithString:line pattern:@"^\\s+|\\w+|\\s*\\*\\s*|\\w+$" trimmingBlank:NO];
     if ([results count] >= 3) {
         NSString *firstPart = results[0];
         NSString *space = @"";
